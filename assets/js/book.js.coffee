@@ -4,7 +4,7 @@ class BookPool
   gen: (game) ->
     @books['B1'] = new BookTask('B1', 'C 語言入門經典 第一章 (10)', 15, 1, 600,
                             ((event) ->
-                              @player.acquireSkill('C: I/O 基礎')
+                              @player.acquireSkill('C 語言: I/O 基礎')
                               @status = 'done'
                             ),
                             10)

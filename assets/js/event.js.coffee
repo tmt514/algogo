@@ -20,6 +20,10 @@ class EventPool
 class Event
   constructor: (@name, @callback, @executeTime) ->
 
+class EventNow extends Event
+  constructor: (name, callback) ->
+    super(name, callback, window.wallTimer.getTime())
+
 class RepeatingEvent extends Event
   constructor: (@name, @_callback, @executeTime, @tick) ->
     @callback = ((event) -> return (e) ->

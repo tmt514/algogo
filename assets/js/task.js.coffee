@@ -62,7 +62,7 @@ class TaskPool
   gen: (game) ->
     @tasks['T1'] = new BasicTask('T1', '打掃 R217', 10, 1, 1000,
                             ((event) ->
-                              window.game.addMessage('Task Complete', 'R217 打掃完畢!')
+                              window.game.addMessage('Task Complete', 'R217 打掃完畢，獲得 10 金幣！')
                               @player.addCoin(10)
                               @status = 'stopped'
                               @current = 0

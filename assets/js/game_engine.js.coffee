@@ -32,6 +32,7 @@ class Game
     @taskPool.gen(this)
     @bookPool.gen(this)
     @locationPool.gen(this)
+    @gameUI.prepare()
 
   start: () ->
 
@@ -68,7 +69,7 @@ class Game
       @wallTimer.getTime() + book.tick))
     
   performLocation: (id) ->
-    @addMessage('Location', "前往 #{@player.locations[id]}！")
+    @addMessage('Location', "前往「#{@player.locations[id].name}」！")
 
   addMessage: (name, msg) ->
     @gameUI.uiLogger.log(name, msg)
@@ -141,11 +142,13 @@ class GameUISkill
 class GameUILocation
   constructor: (@ui, @player) ->
   prepare: () ->
+    console.log("GameUILocation Prepared!")
     $('#locationSelect').change(() ->
       val = $('#locationSelect').val()
-      console.log(val)
+      console.log('select = ',val)
       window.game.performLocation(val)
     )
+  update: () ->
   updateList: () ->
     select = $('#locationSelect')
     options = ""
@@ -158,10 +161,14 @@ class GameUILocation
 class GameUIFight
   constructor: () ->
     @boss = null
+  update: () ->
 
 class GameUILogger
   constructor: () ->
   log: (name, log) ->
+    logview = $('#logview')
+    if logview.children().length >= 300
+      $(':last-child', logview).remove()
     $("<p>[#{name}] #{log}</p>").prependTo($('#logview'))
 
 $(document).ready(() ->

@@ -1,7 +1,9 @@
 class WallTimer
   constructor: () ->
     @now = new Date().getTime()
-    @formula = ((t) -> t - @now)
+    # debug
+    @formula = ((t) -> 100 * (t - @now))
+    # @formula = ((t) -> t - @now)
 
   getTime: () ->
     return @formula(new Date().getTime())
