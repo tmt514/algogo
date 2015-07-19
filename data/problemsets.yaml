@@ -1,0 +1,7 @@
+---
+- id: 'PL1'
+  name: C/C++ beginer
+  followBy: { unlock: ['B1'] }
+- id: 'PL2'
+  name: D/D++ beginer
+  followBy: { unlock: ['B2'] }

@@ -1,0 +1,26 @@
+{
+  "name": "algogo",
+  "version": "0.0.1",
+  "description": "Idle game for algorithms",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tmt514/algogo.git"
+  },
+  "author": "tmt514",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/tmt514/algogo/issues"
+  },
+  "homepage": "https://github.com/tmt514/algogo#readme",
+  "dependencies": {
+    "coffee-script": "^1.9.3",
+    "connect-assets": "^4.8.0",
+    "express": "^4.13.1",
+    "yamljs": "^0.2.3"
+  }
+}

@@ -1,0 +1,17 @@
+doctype html
+html(lang='en')
+  head
+    title #{locals.title}
+    script(type='text/javascript', src='https://code.jquery.com/jquery-2.1.4.min.js')
+    != js("game_engine")
+    != css("game")
+  body
+    h1 Problem Solve Daaz
+    #statusBar
+    p #{locals.message}
+    #panelTask
+    #panelBook
+    #panelLocation
+      select#locationSelect
+    #panelFight
+    #logview
