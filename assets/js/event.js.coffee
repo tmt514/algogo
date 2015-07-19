@@ -19,6 +19,7 @@ class EventPool
 
 class Event
   constructor: (@name, @callback, @executeTime) ->
+    @valid = true
 
 class EventNow extends Event
   constructor: (name, callback) ->
@@ -43,10 +44,12 @@ class EventQueue
     @oldQueue = @queue
     @queue = new Array()
     for event in @oldQueue
+      # an event may be interrupted and abandoned
+      if event.valid == false
+        continue
       if event.executeTime <= currentTime
         console.log(event)
         event.callback(event)
-      # console.log("event time = ", event.executeTime)
       # an event can modify its executeTime to be enqueued again
       if event.executeTime > currentTime
         @queue.push(event)

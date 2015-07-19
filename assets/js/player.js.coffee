@@ -6,7 +6,7 @@ class Player
     @books = new Object()
     @skills = new Object()
     @locations = new Object()
-    @currentLocation = null
+    @currentLocation = {}
 
   setCurrentLocation: (loc) ->
     @currentLocation = loc
@@ -51,4 +51,15 @@ class Player
   addSkillExp: (name, exp) ->
     if @skills[name] != undefined
       @skills[name] += exp
+      @game.addMessage('SkillExp', "覺得技能「#{name}」提昇了 #{exp} 點！")
     return this
+
+  setLocation: (id) ->
+    if @locations[id] == undefined
+      @game.addMessage('Location', "冒險地點「ID:#{id}」不存在。。。")
+      return
+    if @currentLocation.id == id
+      return
+    @currentLocation = @locations[id]
+    @game.addMessage('Location', "前往「#{@currentLocation.name}」！")
+    @game.eventPool.trigger('locationChange')

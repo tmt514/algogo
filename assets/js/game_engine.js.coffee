@@ -4,10 +4,12 @@
 #= require player
 #= require task
 #= require book
+#= require monster
 #= require location
+#= require fight
 
 class Game
-  constructor: () ->
+  constructor: (@config) ->
     console.log("Hello!")
     @wallTimer = new WallTimer()
     @eventQueue = new EventQueue(@wallTimer)
@@ -21,9 +23,11 @@ class Game
     @taskPool = new TaskPool()
     @bookPool = new BookPool()
     @locationPool = new LocationPool()
+    @monsterDataPool = new MonsterDataPool()
 
     @player = new Player(this)
     @gameUI = new GameUI(this)
+    @fight = new Fight(this)
     
     window.game = this
     window.wallTimer = @wallTimer
@@ -31,7 +35,10 @@ class Game
   prepare: () ->
     @taskPool.gen(this)
     @bookPool.gen(this)
+    @monsterDataPool.gen(this)
     @locationPool.gen(this)
+
+    @fight.prepare()
     @gameUI.prepare()
 
   start: () ->
@@ -69,7 +76,7 @@ class Game
       @wallTimer.getTime() + book.tick))
     
   performLocation: (id) ->
-    @addMessage('Location', "前往「#{@player.locations[id].name}」！")
+    @player.setLocation(id)
 
   addMessage: (name, msg) ->
     @gameUI.uiLogger.log(name, msg)
@@ -81,8 +88,10 @@ class GameUI
     @uiBookStore = new GameUIBookStore(this, @game.player)
     @uiLogger = new GameUILogger()
     @uiLocation = new GameUILocation(this, @game.player)
+    @uiFight = new GameUIFight(this, @game.player)
 
   prepare: () ->
+    @uiFight.prepare()
     @uiLocation.prepare()
   
   start: () ->
@@ -159,9 +168,24 @@ class GameUILocation
     select.html(options)
 
 class GameUIFight
-  constructor: () ->
-    @boss = null
+  constructor: (@ui, @player) ->
+  prepare: () ->
+    @ui.game.eventPool.addCallback('locationChange', (() ->
+      @clearMonster()
+      return true
+    ).bind(this))
+    
+  setMonster: (@monster) ->
+  clearMonster: () ->
+    @monster = undefined
   update: () ->
+    if @monster == undefined
+      $('#panelFight').html()
+      return
+    
+    $('#panelFight').html("<h3>#{@monster.name}</h3><p>程式完成度: <span>#{@monster.current}</span> / <span>#{@monster.hp}</span></p>")
+      
+
 
 class GameUILogger
   constructor: () ->
@@ -172,7 +196,9 @@ class GameUILogger
     $("<p>[#{name}] #{log}</p>").prependTo($('#logview'))
 
 $(document).ready(() ->
-  game = new Game()
+  game = new Game({
+    fightTick: 500
+  })
   game.prepare()
   game.start()
 )
