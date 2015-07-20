@@ -17,6 +17,12 @@ class Task
   setPlayer: (player) ->
     @player = player
 
+  forceStop: () ->
+    if @status == 'go'
+      @status = 'stopped'
+      if @ui
+        @ui.update()
+
   update: (event) ->
     if @status == 'go'
       @current += @step
@@ -24,11 +30,14 @@ class Task
       if @current >= @total
         @current = @total
         @status = 'done'
+        @uiDone()
         @done(event)
       else
         event.executeTime = window.wallTimer.getTime() + @tick
 
     @ui.update()
+
+  uiDone: () ->
 
 class BasicTask extends Task
   constructor: (@id, @name, @total, @step, @tick, @done) ->
@@ -55,6 +64,10 @@ class BookTask extends Task
         if @ui
           @ui.update()
       )
+
+  uiDone: () ->
+    if @ui
+      @ui.remove()
 
 class TaskPool
   constructor: () ->

@@ -16,14 +16,23 @@ html(lang='en')
             #panelTab
               .container-row.align-items-center.align-content-center
                 .flex-item.flex-grow-1.centered
-                  #mapTab.tab-button.active Map
+                  #mapTab.tab-button.active
+                    span Map
+                    .tab-notice
                 .flex-item.flex-grow-1.centered
-                  #itemTab.tab-button Item
+                  #itemTab.tab-button
+                    span Item
+                    .tab-notice
                 .flex-item.flex-grow-1.centered
-                  #achievementTab.tab-button Achievements
+                  #achievementTab.tab-button
+                    span Achievements
+                    .tab-notice
             #panelFight.tab-panel
             #panelItem.tab-panel.hidden
+              h3#bookShelfTitle  
               #bookShelf.container-row
+              .item-panel-bg.hidden
+              .item-show.hidden
             #panelAchievement.tab-panel.hidden
           .flex-item.flex-grow-1
             #statusBar

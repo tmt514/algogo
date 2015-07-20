@@ -19,6 +19,7 @@
 }
 
 .flex-item {
+  position: relative;
 }
 
 .centered {
@@ -37,4 +38,7 @@
 }
 .invisible {
   visibility: hidden;
+}
+.text-alert {
+  color: red;
 }

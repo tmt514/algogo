@@ -21,9 +21,15 @@ class GameUI
 class GameUITask
   constructor: (@div, @task, @taskType) ->
     @task.setUI(this)
+    @hasRemoved = false
+
+  remove: () ->
+    @hasRemoved = true
+    if @div
+      @div.remove()
 
   update: () ->
-    if @div == null
+    if @hasRemoved == false && @div == null
       @div = $("<div id='#{@task.id}'></div>")
         .append("<button onclick='window.game.perform#{@taskType}(\"#{@task.id}\")'>#{@task.name}</button>")
         .append("<span class='current'>0</span>")
@@ -33,6 +39,10 @@ class GameUITask
         .appendTo($("#panel#{@taskType}"))
 
     if @task.status == 'go'
+      @div.find('button').attr('disabled', true)
+    if @task.status == 'stopped'
+      @div.find('button').attr('disabled', false)
+    if @task.status == 'done'
       @div.find('button').attr('disabled', true)
     @div.find('.current').text(@task.current)
     @div.find('.total').text(@task.total)
@@ -60,9 +70,10 @@ class GameUIBookStore
   update: () ->
     for key in Object.keys(@player.books)
       book = @player.books[key]
-      if book.ui == null
+      if book.status != 'done' && book.ui == null
         @uiBookList[key] = new GameUITask(null, book, "Book")
-      @uiBookList[key].update()
+      if book.ui
+        @uiBookList[key].update()
 
 class GameUISkill
   constructor: () ->
@@ -125,6 +136,7 @@ class GameUITab
             $(tab).click(() ->
               $('.tab-button.active').not(tab).removeClass('active')
               $(tab).addClass('active')
+              $(tab).find('.tab-notice').html('')
               $('.tab-panel').not(panel).addClass('hidden')
               $(panel).removeClass('hidden')
               if ui != null
@@ -132,6 +144,7 @@ class GameUITab
                   ((ui) -> ui.update()).bind(null, ui)))
             )
     )
+    @uiItem.prepare()
       
 class GameUIAchievement
   constructor: (@gameUI, @player) ->
@@ -139,22 +152,46 @@ class GameUIAchievement
 
 class GameUIItem
   constructor: (@gameUI, @player) ->
-    @bookShelf = new GameUIItemBookShelf(@gameUI, @player)
+    @bookShelf = new GameUIItemBookShelf(this, @player)
   update: () ->
     @bookShelf.update()
+  prepare: () ->
+    @gameUI.game.eventPool.addCallback('addItem', (() ->
+      if $('#panelItem').hasClass('hidden')
+        $('#itemTab .tab-notice').html($('<span>(!)</span>').addClass('text-alert'))
+      else
+        @update()
+      return false
+    ).bind(this))
+    $('.item-panel-bg').click(() ->
+      $('.item-panel-bg').addClass('hidden')
+      $('.item-show').addClass('hidden'))
+    $('.item-show').click(() ->
+      $('.item-panel-bg').addClass('hidden')
+      $('.item-show').addClass('hidden'))
 
 class GameUIItemBookShelf
-  constructor: (@gameUI, @player) ->
+  constructor: (@ui, @player) ->
     @div = $('#bookShelf')
     @bookList = new Object()
   buildNewBook: (book) ->
-    $("<div>#{book.name}</div>").addClass('bookThumb')
+    $("<div>#{book.name}</div>").addClass('book-thumb')
+      .click(((f, book) -> f(book)).bind(null, @showBook, book))
       .appendTo(@div)
   update: () ->
     for key in Object.keys(@bookList)
-      if @player.books[key] == undefined
+      if @player.items.books[key] == undefined
         @bookList[key].remove()
         delete @bookList[key]
-    for key in Object.keys(@player.books)
+    for key in Object.keys(@player.items.books)
       if @bookList[key] == undefined
         @bookList[key] = @buildNewBook(@player.books[key])
+
+    if @div.children('.book-thumb').length > 0
+      $('#bookShelfTitle').html('My Books')
+    else
+      $('#bookShelfTitle').html('')
+  showBook: (book) ->
+    bookInfo = $("<h3>#{book.name}</h3>Meow Meow")
+    $('.item-panel-bg').removeClass('hidden')
+    $('.item-show').html(bookInfo).removeClass('hidden')

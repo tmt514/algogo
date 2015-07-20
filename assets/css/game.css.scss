@@ -31,12 +31,43 @@
 }
 
 .tab-panel {
+  position: relative;
   min-height: 300px;
 }
 
-.bookThumb {
+.book-thumb {
   height: 64px;
   width: 64px;
   border: 1px solid black;
   margin: 8px;
+  &:hover {
+    cursor: pointer;
+    background-color: #DDF;
+  }
+}
+
+.item-show {
+  position: absolute;
+  margin: 32px;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border: 1px solid black;
+  background-color: #FFF;
+  z-index: 2;
+}
+
+.item-panel-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(199,199,199,0.7);
+  z-index: 1;
+}
+
+.tab-notice {
+  display: inline-block;
 }

@@ -55,13 +55,18 @@ class Game
     # TODO: should validate 
     console.log(id)
     task = @player.tasks[id]
-
     if task == undefined
       return
+    @eventPool.trigger('startTask')
     task.begin()
-    @eventQueue.insert(new Event("Task #{id}",
+    event = new Event("Task #{id}",
       ((t)-> return (e)->t.update(e))(task),
-      @wallTimer.getTime() + task.tick))
+      @wallTimer.getTime() + task.tick)
+    @eventPool.addCallback(['startTask', 'endTask', 'locationChange'], ((event, task) ->
+      event.valid = false
+      task.forceStop()
+      return true).bind(null, event, task))
+    @eventQueue.insert(event)
 
   performBook: (id) ->
     console.log(id)
@@ -71,10 +76,16 @@ class Game
     if book.validate() == false
       console.log("cancelled!")
       return
+    @eventPool.trigger('startTask')
     book.begin()
-    @eventQueue.insert(new Event("Book #{id}",
+    event = new Event("Book #{id}",
       ((t)-> return (e)->t.update(e))(book),
-      @wallTimer.getTime() + book.tick))
+      @wallTimer.getTime() + book.tick)
+    @eventPool.addCallback(['startTask', 'endTask', 'locationChange'], ((event, book) ->
+      event.valid = false
+      book.forceStop()
+      return true).bind(null, event, book))
+    @eventQueue.insert(event)
     
   performLocation: (id) ->
     @player.setLocation(id)

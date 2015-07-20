@@ -7,6 +7,7 @@ class Player
     @skills = new Object()
     @locations = new Object()
     @currentLocation = {}
+    @items = {books: {}}
 
   setCurrentLocation: (loc) ->
     @currentLocation = loc
@@ -63,3 +64,12 @@ class Player
     @currentLocation = @locations[id]
     @game.addMessage('Location', "前往「#{@currentLocation.name}」！")
     @game.eventPool.trigger('locationChange')
+
+  addItem: (category, object) ->
+    if @items[category] == undefined
+      @items[category] = {}
+    @items[category][object.id] = object
+    @game.eventPool.trigger('addItem')
+
+  addItemBook: (book) ->
+    @addItem('books', book)

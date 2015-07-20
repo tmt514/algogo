@@ -5,6 +5,7 @@ class BookPool
     @books['B1'] = new BookTask('B1', 'C 語言入門經典 第一章 (10)', 15, 1, 600,
                             ((event) ->
                               @player.acquireSkill('C 語言: I/O 基礎')
+                              @player.addItemBook(this)
                               @status = 'done'
                             ),
                             10)
