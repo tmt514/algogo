@@ -10,12 +10,31 @@
 
 .flex-grow-3 {
   flex-grow: 3;
+  flex-basis: 0;
 }
 
 .flex-grow-1 {
   flex-grow: 1;
+  flex-basis: 0;
 }
 
 .flex-item {
-  
+}
+
+.centered {
+  justify-content: center;
+  text-align: center;
+}
+
+.align-items-center {
+  align-items: center;
+}
+.align-content-center {
+  align-content: center;
+}
+.hidden {
+  display: none;
+}
+.invisible {
+  visibility: hidden;
 }

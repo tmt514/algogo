@@ -12,3 +12,31 @@
 #locationSelect {
   width: 150px;
 }
+
+
+.tab-button {
+  margin: 2px;
+  padding: 5px;
+  border: 1px solid #BBB;
+  color: #BBB;
+  &.active {
+    font-weight: 900;
+    color: #000;
+    border: 1px solid #555;
+  }
+  &:hover {
+    background-color: #FFD;
+    cursor: pointer;
+  }
+}
+
+.tab-panel {
+  min-height: 300px;
+}
+
+.bookThumb {
+  height: 64px;
+  width: 64px;
+  border: 1px solid black;
+  margin: 8px;
+}

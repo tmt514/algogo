@@ -13,7 +13,18 @@ html(lang='en')
       .flex-item
         .container-row
           .flex-item.flex-grow-3
-            #panelFight
+            #panelTab
+              .container-row.align-items-center.align-content-center
+                .flex-item.flex-grow-1.centered
+                  #mapTab.tab-button.active Map
+                .flex-item.flex-grow-1.centered
+                  #itemTab.tab-button Item
+                .flex-item.flex-grow-1.centered
+                  #achievementTab.tab-button Achievements
+            #panelFight.tab-panel
+            #panelItem.tab-panel.hidden
+              #bookShelf.container-row
+            #panelAchievement.tab-panel.hidden
           .flex-item.flex-grow-1
             #statusBar
             p #{locals.message}
