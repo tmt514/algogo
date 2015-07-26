@@ -1,45 +1,45 @@
-doctype html
-html(lang='en')
-  head
-    title #{locals.title}
-    script(type='text/javascript', src='https://code.jquery.com/jquery-2.1.4.min.js')
-    != js("game_engine")
-    != css("main")
-    != css("game")
-  body
-    .container-column
-      .flex-item
-        h1 Problem Solve Daaz
-      .flex-item
-        .container-row
-          .flex-item.flex-grow-3
-            #panelTab
-              .container-row.align-items-center.align-content-center
-                .flex-item.flex-grow-1.centered
-                  #mapTab.tab-button.active
-                    span Map
-                    .tab-notice
-                .flex-item.flex-grow-1.centered
-                  #itemTab.tab-button
-                    span Item
-                    .tab-notice
-                .flex-item.flex-grow-1.centered
-                  #achievementTab.tab-button
-                    span Achievements
-                    .tab-notice
-            #panelFight.tab-panel
-            #panelItem.tab-panel.hidden
-              h3#bookShelfTitle  
-              #bookShelf.container-row
-              .item-panel-bg.hidden
-              .item-show.hidden
-            #panelAchievement.tab-panel.hidden
-          .flex-item.flex-grow-1
-            #statusBar
-            p #{locals.message}
-            #panelTask
-            #panelBook
-            #panelLocation
-              select#locationSelect
-      .flex-item
-        #logview
+
+extends layout
+
+block head
+  != js("game_engine")
+  != css("main")
+  != css("game")
+
+block content
+  .container-column
+    .flex-item
+      h1 Problem Solve Daaz
+    .flex-item
+      .container-row
+        .flex-item.flex-grow-3
+          #panelTab
+            .container-row.align-items-center.align-content-center
+              .flex-item.flex-grow-1.centered
+                #mapTab.tab-button.active
+                  span Map
+                  .tab-notice
+              .flex-item.flex-grow-1.centered
+                #itemTab.tab-button
+                  span Item
+                  .tab-notice
+              .flex-item.flex-grow-1.centered
+                #achievementTab.tab-button
+                  span Achievements
+                  .tab-notice
+          #panelFight.tab-panel
+          #panelItem.tab-panel.hidden
+            h3#bookShelfTitle  
+            #bookShelf.container-row
+            .item-panel-bg.hidden
+            .item-show.hidden
+          #panelAchievement.tab-panel.hidden
+        .flex-item.flex-grow-1
+          #statusBar
+          p #{locals.message}
+          #panelTask
+          #panelBook
+          #panelLocation
+            select#locationSelect
+    .flex-item
+      #logview

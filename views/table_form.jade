@@ -1,0 +1,7 @@
+mixin gen_table_form(tblname, columns)
+  form(action="/admin/db/" + tblname, method="post").form
+    each field in columns
+      div
+        label(for="data[#{field.name}]") #{field.name}
+        input(name="data[#{field.name}]")
+    button(type='submit') Submit

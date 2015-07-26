@@ -1,0 +1,9 @@
+extends layout
+
+block head
+
+block content
+  form(action='login', method='post')
+    label(for='passcode')
+    input(name='passcode', placeholder='請輸入 Passcode')
+    button(type='submit') Enter

@@ -1,0 +1,21 @@
+extends layout
+include table_form
+
+block head
+  != css('main')
+  != css('admin')
+
+block content
+  .container-column
+    .container-row
+      each field in columns
+        .flex-item.flex-grow-1
+          span= field.name
+    each row in rows
+      .container-row
+        each field in columns
+          .flex-item.flex-grow-1
+            span= row[field.name]
+
+
+  mixin gen_table_form(tblname, columns)
