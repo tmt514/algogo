@@ -10,7 +10,7 @@ db.serialize(function() {
   /* book and task are both using task table*/
   db.run("CREATE TABLE task ("
     + "category STRING," /* TYPE: book, task */
-    + "id STRING,"
+    + "id STRING PRIMARY KEY,"
     + "name STRING,"
     + "total INT,"
     + "step INT,"
@@ -23,14 +23,14 @@ db.serialize(function() {
 
   db.run("CREATE TABLE location ("
     + "category STRING," /* TYPE: room, pset */
-    + "id STRING,"
+    + "id STRING PRIMARY KEY,"
     + "name STRING,"
     + "unlock_condition TEXT,"
     + "monster_weights TEXT)",
     function(err) { if(err !== null) console.log(err); });
 
   db.run("CREATE TABLE monster_data ("
-    + "id STRING,"
+    + "id STRING PRIMARY KEY,"
     + "name STRING,"
     + "hpRange TEXT,"
     + "meta TEXT," /* {adjustAtk: , adjustRep:} */
@@ -43,7 +43,7 @@ db.serialize(function() {
     function(err) { if(err !== null) console.log(err); });
 
   db.run("CREATE TABLE skill ("
-    + "id STRING,"
+    + "id STRING PRIMARY KEY,"
     + "name STRING,"
     + "unlock_condition TEXT,"
     + "messages TEXT,"
@@ -52,7 +52,7 @@ db.serialize(function() {
 
   db.run("CREATE TABLE item ("
     + "category STRING,"
-    + "id STRING,"
+    + "id STRING PRIMARY KEY,"
     + "name STRING,"
     + "unlock_condition TEXT,"
     + "messages TEXT,"
@@ -61,7 +61,7 @@ db.serialize(function() {
     function(err) { if(err !== null) console.log(err); });
 
   db.run("CREATE TABLE info ("
-    + "id STRING,"
+    + "id STRING PRIMARY KEY,"
     + "info TEXT)",
     function(err) { if(err !== null) console.log(err); });
 });

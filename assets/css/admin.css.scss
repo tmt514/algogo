@@ -3,4 +3,49 @@
   background-color: #EEF;
   padding: 10px;
   border-radius: 3px;
+  .form-field {
+    label {
+      vertical-align: top;
+      display: inline-block;
+      text-align: right;
+      padding-right: 10px;
+      width: 15%;
+    }
+    textarea {
+      display: inline-block;
+      height: 300px;
+      width: 15%;
+    }
+  }
+}
+
+.form-json-editor {
+  vertical-align: top;
+  display: inline-block;
+  width: 60%;
+  height: 300px;
+}
+
+.danger {
+  margin: 20px;
+  padding: 10px;
+  font-family: monospace;
+
+  border: 1px solid #d9534f;
+  background-color: #f2dede;
+  color: #a94442;
+}
+
+.dbtable {
+  tbody {
+    .row-edit {
+      cursor: pointer;
+      &:hover {
+        background-color: #ffd;
+      }
+    }
+    tr:nth-child(odd) {
+      background-color: #eee;
+    }
+  }
 }

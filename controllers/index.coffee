@@ -45,13 +45,16 @@ app.get('/admin/db/:tblname', (req, res) ->
   return if !secure.check(req, res)
   name = req.params.tblname
   if name == 'task'
-    Task.get(((res, tblname, rows) ->
+    Task.get(((req, res, tblname, err, rows) ->
+      req.flash('error', err) if err
       res.render('data_show', {
         rows: rows,
         columns: Task.columns(),
         tblname: tblname,
+        formMethod: 'POST',
+        data: Task.defaultValues()
       })
-    ).bind(null, res, name))
+    ).bind(null, req, res, name))
   else
     res.status(404).send('Table name is not recognized.')
 )
@@ -61,9 +64,10 @@ app.post('/admin/db/:tblname', (req, res) ->
   return if !secure.check(req, res)
   name = req.params.tblname
   if name == 'task'
-    Task.add(((res, name) ->
+    Task.add(((req, res, name, err) ->
+      req.flash('error', err) if err
       res.redirect("/admin/db/#{name}")
-    ).bind(null, res, name), req.body)
+    ).bind(null, req, res, name), req.body.data)
   else
     res.status(404).send('Table name is not recognized.')
 )
@@ -73,23 +77,32 @@ app.get('/admin/db/:tblname/:id', (req, res) ->
   return if !secure.check(req, res)
   name = req.params.tblname
   if name == 'task'
-    Task.get(((res, rows) ->
-      res.json(rows)
-    ).bind(null, res),
+    Task.get(((req, res, tblname, err, rows) ->
+      req.flash('error', err) if err
+      res.render('data_show', {
+        rows: rows,
+        columns: Task.columns(),
+        tblname: tblname,
+        formMethod: 'PUT',
+        data: rows[0],
+        dataid: req.params.id,
+      })
+    ).bind(null, req, res, name),
+    [req.params.id],
     "",
-    "id = #{req.params.id}")
+    "id = ?")
   else
     res.status(404).send('Table name is not recognized.')
 )
 
 # update
-app.put('/admin/db/:tblname/:id', (req, res) ->
+app.post('/admin/db/:tblname/:id', (req, res) ->
   return if !secure.check(req, res)
   name = req.params.tblname
   if name == 'task'
-    Task.add(((res, name) ->
+    Task.update(((res, name) ->
       res.redirect("/admin/db/#{name}")
-    ).bind(null, res, name), req.body)
+    ).bind(null, res, name), req.body.data)
   else
     res.status(404).send('Table name is not recognized.')
 )

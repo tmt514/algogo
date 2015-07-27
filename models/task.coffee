@@ -7,19 +7,23 @@ class Task extends Table
     @cols = null
     @_getColumns()
 
-  _getColumns: () ->
-    db.serialize((() ->
-      # get column definition from sqlite
-      query = "SELECT sql FROM sqlite_master WHERE tbl_name = '#{@name}' AND type = 'table'"
-      db.all(query, (err, rows) ->
-          rawColString = rows[0].sql.match('[(]\(.*\)[)]')[1].split(',')
-          @cols = []
-          for x in rawColString
-            y = x.split(' ')
-            @cols.push({name: y[0], type: y[1]})
-          console.log(@cols)
-      )).bind(this))
+  _modifyColumns: () ->
+    for x in @cols
+      if (x.name == 'messages' or x.name == 'unlock_condition' or
+      x.name == 'task_complete' or x.name == 'location_list')
+        x.type = 'JSON'
 
-  columns: () -> return @cols
-
+  defaultValues: () ->
+    ret = {
+      category: 'task',
+      id: 'T2',
+      total: 10,
+      step: 1,
+      tick: 1000,
+      messages: '{}',
+      unlock_condition: '{}',
+      task_complete: '{}',
+      location_list: '[]',
+    }
+    return ret
 module.exports = Task

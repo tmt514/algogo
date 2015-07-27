@@ -3,6 +3,11 @@ html(lang='en')
   head
     title #{locals.title}
     script(type='text/javascript', src='https://code.jquery.com/jquery-2.1.4.min.js')
+    link(rel="stylesheet", href="//cdn.jsdelivr.net/evil-icons/1.7.2/evil-icons.min.css")
+    script(src="//cdn.jsdelivr.net/evil-icons/1.7.2/evil-icons.min.js")
     block head
   body
+    - msg = flash('error')
+    if msg.length > 0 
+      .danger #{JSON.stringify(msg)}
     block content

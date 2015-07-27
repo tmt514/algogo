@@ -4,18 +4,25 @@ include table_form
 block head
   != css('main')
   != css('admin')
+  link(href='/scripts/jsoneditor/dist/jsoneditor.min.css', rel='stylesheet', type='text/css')
+  script(src='/scripts/jsoneditor/dist/jsoneditor.min.js')
+  != js('admin')
 
 block content
-  .container-column
-    .container-row
-      each field in columns
-        .flex-item.flex-grow-1
-          span= field.name
-    each row in rows
-      .container-row
+  table.dbtable(data-tblname=tblname)
+    thead
+      tr
+        th
         each field in columns
-          .flex-item.flex-grow-1
-            span= row[field.name]
+          th= field.name
+    tbody
+      each row in rows
+        tr(data-id=row['id'])
+          td
+            .row-edit(data-icon='ei-pencil',data-size='s')
+          each field in columns
+            td= row[field.name]
 
-
-  mixin gen_table_form(tblname, columns)
+  if !dataid
+    - dataid = ''
+  mixin gen_table_form(formMethod, tblname, dataid, columns, data)

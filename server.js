@@ -4,6 +4,7 @@ require('coffee-script/register');
 var express = require('express');
 var app = express();
 var session = require('express-session');
+var flash = require('connect-flash');
 var uuid = require('node-uuid');
 var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
@@ -11,6 +12,7 @@ var multer = require('multer');
 
 //set up static folder
 app.use(express.static('public'));
+app.use('/scripts', express.static(__dirname + '/node_modules'));
 //set up asset pipelines
 app.use(require("connect-assets")());
 //set up views
@@ -29,8 +31,13 @@ app.use(session({
     },
     secret: 'tmt-test',
     cookie: { maxAge: 8640000 }
-}))
-
+}));
+app.use(flash());
+// Expose the flash function to the view layer
+app.use(function(req, res, next) {
+  res.locals.flash = req.flash.bind(req)
+  next()
+});
 //handle data
 var YAML = require('yamljs');
 

@@ -1,7 +1,22 @@
-mixin gen_table_form(tblname, columns)
-  form(action="/admin/db/" + tblname, method="post").form
-    each field in columns
-      div
-        label(for="data[#{field.name}]") #{field.name}
-        input(name="data[#{field.name}]")
+mixin gen_table_form(method, tblname, dataid, columns, data)
+  form(id="dataform", action="/admin/db/" + tblname + '/' + dataid, method='POST').form
     button(type='submit') Submit
+    input(type='hidden', name='_method', value=method)
+    each field in columns
+      div.form-field
+        label(for="data[#{field.name}]") #{field.name}
+        if field.type == 'INT'
+          input(name="data[#{field.name}]",type='number',value=data[field.name])
+        else if field.type == 'SELECT'
+          select(name="data[#{field.name}]")
+            each opt in field.options
+              if opt == data[field.name]
+                option(value=opt,selected='selected') #{opt}
+              else
+                option(value=opt) #{opt}
+        else if field.type == 'JSON'
+          textarea(name="data[#{field.name}]", data-editor="editor_#{field.name}") #{data[field.name]}
+          .form-json-editor(id="editor_#{field.name}")
+        else
+          input(name="data[#{field.name}]",value=data[field.name])
+
