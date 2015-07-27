@@ -38,21 +38,25 @@ app.get('/admin', (req, res) ->
 db = require('../db')
 Task = new (require('../models/task'))()
 
+models = {
+  task: Task
+}
+
 console.log(Task)
 
 # model index
 app.get('/admin/db/:tblname', (req, res) ->
   return if !secure.check(req, res)
   name = req.params.tblname
-  if name == 'task'
-    Task.get(((req, res, tblname, err, rows) ->
+  if models[name]
+    models[name].get(((req, res, tblname, err, rows) ->
       req.flash('error', err) if err
       res.render('data_show', {
         rows: rows,
-        columns: Task.columns(),
+        columns: models[name].columns(),
         tblname: tblname,
         formMethod: 'POST',
-        data: Task.defaultValues()
+        data: models[name].defaultValues()
       })
     ).bind(null, req, res, name))
   else
@@ -63,8 +67,8 @@ app.get('/admin/db/:tblname', (req, res) ->
 app.post('/admin/db/:tblname', (req, res) ->
   return if !secure.check(req, res)
   name = req.params.tblname
-  if name == 'task'
-    Task.add(((req, res, name, err) ->
+  if models[name]
+    models[name].add(((req, res, name, err) ->
       req.flash('error', err) if err
       res.redirect("/admin/db/#{name}")
     ).bind(null, req, res, name), req.body.data)
@@ -76,12 +80,12 @@ app.post('/admin/db/:tblname', (req, res) ->
 app.get('/admin/db/:tblname/:id', (req, res) ->
   return if !secure.check(req, res)
   name = req.params.tblname
-  if name == 'task'
-    Task.get(((req, res, tblname, err, rows) ->
+  if models[name]
+    models[name].get(((req, res, tblname, err, rows) ->
       req.flash('error', err) if err
       res.render('data_show', {
         rows: rows,
-        columns: Task.columns(),
+        columns: models[name].columns(),
         tblname: tblname,
         formMethod: 'PUT',
         data: rows[0],
@@ -99,8 +103,8 @@ app.get('/admin/db/:tblname/:id', (req, res) ->
 app.post('/admin/db/:tblname/:id', (req, res) ->
   return if !secure.check(req, res)
   name = req.params.tblname
-  if name == 'task'
-    Task.update(((res, name) ->
+  if models[name]
+    models[name].update(((res, name) ->
       res.redirect("/admin/db/#{name}")
     ).bind(null, res, name), req.body.data)
   else
@@ -108,6 +112,7 @@ app.post('/admin/db/:tblname/:id', (req, res) ->
 )
 
 # delete
+###
 app.delete('/admin/db/:tblname/:id', (req, res) ->
   return if !secure.check(req, res)
   name = req.params.tblname
@@ -118,5 +123,6 @@ app.delete('/admin/db/:tblname/:id', (req, res) ->
   else
     res.status(404).send('Table name is not recognized.')
 )
+###
 
 module.exports = app
