@@ -16,7 +16,7 @@ class Task extends Table
   defaultValues: () ->
     ret = {
       category: 'task',
-      id: 'T2',
+      id: 'T2', # TODO: automatically get new id
       total: 10,
       step: 1,
       tick: 1000,

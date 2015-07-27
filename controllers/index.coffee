@@ -37,12 +37,22 @@ app.get('/admin', (req, res) ->
 # models
 db = require('../db')
 Task = new (require('../models/task'))()
+Location = new (require('../models/location'))()
+MonsterData = new (require('../models/monster_data'))()
+Skill = new (require('../models/skill'))()
+Item = new (require('../models/item'))()
+Info = new (require('../models/info'))()
 
 models = {
   task: Task
+  location: Location
+  monster_data: MonsterData
+  skill: Skill
+  item: Item
+  info: Info
 }
 
-console.log(Task)
+console.log(Location)
 
 # model index
 app.get('/admin/db/:tblname', (req, res) ->
