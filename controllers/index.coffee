@@ -1,5 +1,6 @@
 express = require('express')
 app = express.Router()
+uuid = require('node-uuid')
 
 app.get('/something',
   (req, res) ->
@@ -7,6 +8,7 @@ app.get('/something',
 )
 
 app.get('/', (req, res) ->
+  req.session.seed = uuid.v1()
   res.render('index', {
     title: 'Hey',
     message: 'Hello there!',
@@ -53,6 +55,30 @@ models = {
 }
 
 console.log(Location)
+
+# data index
+app.get('/:tblname', (req, res) ->
+  if !req.session
+    res.status(401).send('Forbidden')
+    return
+  name = req.params.tblname
+  if name == "location"
+    models[name].get(((req, res, tblname, err, rows) ->
+      res.json(rows)
+    ).bind(null, req, res, name),
+    [],
+    '',
+    "")
+  else if models[name]
+    models[name].get(((req, res, tblname, err, rows) ->
+      res.json(rows)
+    ).bind(null, req, res, name),
+    [],
+    '',
+    "category = 'task'")
+  else
+    res.status(404).send('Table name is not recognized.')
+)
 
 # model index
 app.get('/admin/db/:tblname', (req, res) ->
